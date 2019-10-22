@@ -1,0 +1,6 @@
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/bin/Debug/BouncingBallScreen.exe
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/bin/Debug/BouncingBallScreen.pdb
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/obj/x86/Debug/BouncingBallScreen.csprojAssemblyReference.cache
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/obj/x86/Debug/BouncingBallScreen.csproj.CoreCompileInputs.cache
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/obj/x86/Debug/BouncingBallScreen.exe
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/obj/x86/Debug/BouncingBallScreen.pdb

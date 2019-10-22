@@ -7,13 +7,16 @@
  * Program name: BouncingBallScreen
 *****************************************************/
 using System;
+using System.Windows.Forms;
+using System.Drawing;
 namespace BouncingBallScreen
 {
     class MainClass
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Welcome to Blistering Biomes!");
+            Application.Run(new BouncingBallUI());
         }
     }
 }
