@@ -30,7 +30,7 @@ namespace BouncingBallScreen
         protected static System.Timers.Timer BallClock = new System.Timers.Timer(); // ball clock, this is what will handle the refresh. (by interval)
         protected const double BallSpeed = 60; // setting the refresh to 60 times per second
         protected static System.Timers.Timer GraphicClock = new System.Timers.Timer();
-        protected const double GraphicSpeed = 30; // refresh the graphical area 30 times per second.
+        protected const double GraphicSpeed = 45; // refresh the graphical area 30 times per second.
         protected double Speed { get; set; }
 
         public BouncingBallUI()
@@ -64,7 +64,7 @@ namespace BouncingBallScreen
         protected void UpdateBallPosition(object sender, System.Timers.ElapsedEventArgs myevent)
         {
             Invalidate();
-            startingpositionx += 1;
+            startingpositionx += 1.5;
         }
     }
 }
