@@ -1,8 +1,8 @@
 ﻿<Properties StartupConfiguration="{894AC502-474C-472A-B98F-35DA602D2A34}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="BouncingBallScreen/BouncingBallUI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="BouncingBallScreen/BouncingBallMain.cs">
     <Files>
       <File FileName="BouncingBallScreen/BouncingBallMain.cs" Line="19" Column="51" />
-      <File FileName="BouncingBallScreen/BouncingBallUI.cs" Line="95" Column="10" />
+      <File FileName="BouncingBallScreen/BouncingBallUI.cs" Line="74" Column="57" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

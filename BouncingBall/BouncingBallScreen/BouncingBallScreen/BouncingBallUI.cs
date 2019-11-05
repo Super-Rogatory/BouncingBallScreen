@@ -14,6 +14,10 @@ namespace BouncingBallScreen
 {
     public class BouncingBallUI : Form
     {
+        // declaration of RenderButtons
+        Button buttonStart, buttonQuit, readysetgo, buttonNew;
+        Label speedboxTitle, directionboxTitle, _new;
+        TextBox SpeedBox, DirectionalBox;
         // dimensions for the ball screen
         protected const int from_x = 535;
         protected const int from_y = 115;
@@ -39,7 +43,7 @@ namespace BouncingBallScreen
         protected double Speed { get; set; }
         protected string SpeedBoxText { get; set; }
         protected bool isOn; //the boolean switch that will allow for an update in the ball position
-
+        protected string speed_string = String.Empty;
         public BouncingBallUI()
         {
             Size = new Size(1920, 1080);
@@ -49,30 +53,34 @@ namespace BouncingBallScreen
             RenderButtons();
             RenderGraphics();
         }
-        protected void RenderButtons()
+        public void RenderButtons()
         {
-            Label speedboxTitle, directionboxTitle, _new;
-            Button buttonStart, buttonQuit;
+            // Buttons
             buttonStart = new Button { Text = "Start", Location = new Point(355, 540), Size = new Size(50, 50) };
             buttonQuit = new Button { Text = "Quit", Location = new Point(1625, 540), Size = new Size(50, 50) };
+            buttonNew = new Button { Text = "New", Location = new Point(1612, 400), AutoSize = true };
+            readysetgo = new Button { Text = "Set", Location = new Point(1612, 500), AutoSize = true };
+
             buttonStart.Click += UpdateBallPosition;
             buttonQuit.Click += EndApplication;
+            buttonNew.Click += NewButtonClick;
+
             Controls.Add(buttonStart);
             Controls.Add(buttonQuit);
+            Controls.Add(buttonNew);
             // TODO: | Label: X - Coord, Y - Coord
-            TextBox SpeedBox, DirectionalBox;
+            // Titles / Labels
             _new = new Label { Text = "Enter the speed (left side) and angle (right side) ", Location = new Point(1510, 350), AutoSize = true }; // creates instruction for the user
             speedboxTitle = new Label { Text = "Enter speed (1-100)", Location = new Point(1450, 380), AutoSize = true };
-            SpeedBox = new TextBox {Location = new Point(1450,400)};
             directionboxTitle = new Label { Text = "Enter the degree (x,y)", Location = new Point(1750, 380), AutoSize = true };
-            DirectionalBox = new TextBox { Location = new Point(1750, 400) };
-            // adding controls
-            Controls.Add(_new); // creates text 
-            Controls.Add(speedboxTitle); // creates text
-            Controls.Add(directionboxTitle); // creates text
-            Controls.Add(SpeedBox);
-            Controls.Add(DirectionalBox);
+
+            // Textboxs / Input Properties
+            SpeedBox = new TextBox {Location = new Point(1450,400), Enabled = true, Text = string.Empty};
+            DirectionalBox = new TextBox { Location = new Point(1750, 400), Enabled = true };
+            readysetgo.Click += GetValues;
+
         }
+      
         protected void RenderGraphics()
         {
             // TODO: ball speed per second is given by the new function
@@ -82,15 +90,31 @@ namespace BouncingBallScreen
             ball_deltax = (BallSpeed_PerTic * BallDirectionX) / hypotenuse;
             ball_deltay = (BallSpeed_PerTic * BallDirectionY) / hypotenuse;
         }
-        protected void SpeedBoxEnter(object sender, EventArgs events)
+       
+        protected void NewButtonClick(object sender, EventArgs events)
         {
-            // TODO: finish SpeedBox functionality for New Button
-            
-            
+            // TODO: Create a button that retreives all the values set in the Box
+            // if new button is clicked.. display (_new)
+            // remove the new button, replace with the go button
+            Controls.Add(_new); // creates text 
+            Controls.Add(speedboxTitle); // creates text
+            Controls.Add(directionboxTitle); // creates text
+            Controls.Add(SpeedBox);
+            Controls.Add(DirectionalBox);
+            Controls.Add(readysetgo);
+            Controls.Remove(buttonNew);
+
         }
-        protected void DegreeBoxEnter(object sender, EventArgs events)
+        protected void GetValues(object sender, EventArgs events)
         {
-            // TODO: finish DegreeBox function for New Button
+            Controls.Remove(readysetgo);
+            Controls.Remove(_new);
+            Controls.Remove(speedboxTitle);
+            Controls.Remove(directionboxTitle);
+            Controls.Remove(SpeedBox);
+            Controls.Remove(DirectionalBox);
+            Controls.Add(buttonNew);
+            // TODO: add logic
         }
        
         protected override void OnPaint(PaintEventArgs e)
