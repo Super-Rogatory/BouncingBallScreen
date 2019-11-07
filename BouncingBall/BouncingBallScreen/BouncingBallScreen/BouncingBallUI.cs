@@ -18,14 +18,18 @@ namespace BouncingBallScreen
         Button buttonStart, buttonQuit, readysetgo, buttonNew;
         Label speedboxTitle, directionboxTitle, _new;
         TextBox SpeedBox, DirectionalBox;
-        // dimensions for the ball screen
+        // position for the ball screen
         protected const int from_x = 535;
         protected const int from_y = 115;
         protected const int maxdimensionforx = 850;
         protected const int maxdimensionfory = 850;
         protected const double balldefault_xposition = 960;
         protected const double balldefault_yposition = 540;
-
+        // position during ricochet
+        protected const double rightsidehand_x = 1385;
+        protected const double leftsidehand_x = 535;
+        protected const double upperwall_y = 115;
+        protected const double lowerwall_y = 965;
         // dimensions for the ball
         protected const int radius = 10;
         protected double startingpositionx = 960;
@@ -35,17 +39,16 @@ namespace BouncingBallScreen
         // balls frames per second along with the refresh rate
         protected double BallSpeed_PerSecond; // pixels per second
         protected double BallSpeed_PerTic; // pixels per tic
-        protected double BallDirectionX, BallDirectionY; // TODO: the angle are which to launch the ball is given by the NEW
         protected static System.Timers.Timer BallClock = new System.Timers.Timer(); // ball clock, this is what will handle the refresh. (by interval)
-        protected double BallSpeed = 60; // setting the refresh to 60 times per second
         protected static System.Timers.Timer GraphicClock = new System.Timers.Timer();
+        protected double BallSpeed = 60; // setting the refresh to 60 times per second
         protected double GraphicSpeed = 45; //DEFAULT: refresh the graphical area 30 times per second.
         protected double BallDirection = 45; //DEFAULT:
+        // misc
         protected double directioninradians;
         protected double Speed { get; set; }
         protected string SpeedBoxText { get; set; }
         protected bool isOn; //the boolean switch that will allow for an update in the ball position
-        protected string speed_string = String.Empty;
         public BouncingBallUI()
         {
             Size = new Size(1920, 1080);
@@ -85,15 +88,18 @@ namespace BouncingBallScreen
         protected void RenderGraphics()
         {
             // need to convert degrees to radians.
-            directioninradians = (BallDirection * Math.PI) / 180;
+            directioninradians = (BallDirection * Math.PI) / 180.0;
             // TODO: The speed per tic is the ball speed per refresh divided by refreshes a second
             BallSpeed_PerTic = BallSpeed / GraphicSpeed;
-            ball_deltax = BallSpeed_PerTic / Math.Cos(directioninradians);
-            ball_deltay = BallSpeed_PerTic / Math.Sin(directioninradians);
+            ball_deltax = BallSpeed_PerTic * Math.Cos(directioninradians);
+            ball_deltay = BallSpeed_PerTic * Math.Sin(directioninradians);
         }
 
         protected void NewButtonClick(object sender, EventArgs events)
         {
+            isOn = false; 
+            BallClock.Enabled = false;
+            GraphicClock.Enabled = false;
             Controls.Add(_new); // creates text 
             Controls.Add(speedboxTitle); // creates text
             Controls.Add(directionboxTitle); // creates text
@@ -113,7 +119,7 @@ namespace BouncingBallScreen
             Controls.Remove(DirectionalBox);
             Controls.Add(buttonNew);
             if (!SpeedBox.Text.Length.Equals(0)) { BallSpeed = Convert.ToDouble(SpeedBox.Text); } //Avoids strange parser error
-            if (!SpeedBox.Text.Length.Equals(0)) { BallDirection = Convert.ToDouble(DirectionalBox.Text); } // if the length is equal to 0 do not try and convert
+            if (!SpeedBox.Text.Length.Equals(0)) { BallDirection = Convert.ToDouble(DirectionalBox.Text); } // if the length is equal to null do not try and convert
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -122,7 +128,7 @@ namespace BouncingBallScreen
             Graphics bouncingballarea = e.Graphics;
             bouncingballarea.DrawRectangle(Pens.Black, from_x, from_y, maxdimensionforx, maxdimensionfory);
             Graphics ball = e.Graphics;
-            ball.FillEllipse(Brushes.Red, (int)startingpositionx, (int)startingpositiony, radius, radius);
+            ball.FillEllipse(Brushes.Red, (int)startingpositionx - 5, (int)startingpositiony - 5, radius, radius);
             if (isOn)
             {
                 StartingGraphicClock(GraphicSpeed); // pull value from the new function
@@ -150,8 +156,29 @@ namespace BouncingBallScreen
             isOn = true;
             Invalidate();
             startingpositionx += ball_deltax;
-            startingpositiony += ball_deltay;
+            startingpositiony -= ball_deltay;
+            if ((int)Math.Round(startingpositionx + 5) >= rightsidehand_x)
+            {
+                ball_deltax = -ball_deltax;
+                ball_deltay = -ball_deltay;
+            }
+            if ((int)Math.Round(startingpositionx - 5) <= leftsidehand_x)
+            {
+                ball_deltax = -ball_deltax;
+                ball_deltay = -ball_deltay;
+            }
+            if((int)Math.Round(startingpositiony + 5) >= upperwall_y)
+            {
+                ball_deltax = -ball_deltax;
+                ball_deltay = -ball_deltay;
+            }
+            if((int)Math.Round(startingpositiony - 5) <= lowerwall_y)
+            {
+                ball_deltax = -ball_deltax;
+                ball_deltay = -ball_deltay;
+            }
         }
+
         protected void EndApplication(object sender, EventArgs myevent) => Close();
     }
 }
