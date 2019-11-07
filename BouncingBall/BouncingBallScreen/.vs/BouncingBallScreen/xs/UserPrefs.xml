@@ -1,9 +1,20 @@
 ﻿<Properties StartupConfiguration="{894AC502-474C-472A-B98F-35DA602D2A34}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="BouncingBallScreen/BouncingBallMain.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="BouncingBallScreen/BouncingBallUI.cs">
     <Files>
-      <File FileName="BouncingBallScreen/BouncingBallMain.cs" Line="19" Column="51" />
-      <File FileName="BouncingBallScreen/BouncingBallUI.cs" Line="74" Column="57" />
+      <File FileName="BouncingBallScreen/BouncingBallMain.cs" Line="18" Column="64" />
+      <File FileName="BouncingBallScreen/BouncingBallUI.cs" Line="73" Column="31" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="BouncingBallScreen" expanded="True">
+            <Node name="BouncingBallScreen" expanded="True">
+              <Node name="BouncingBallUI.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
