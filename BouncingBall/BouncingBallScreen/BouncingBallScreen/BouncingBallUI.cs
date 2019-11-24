@@ -9,7 +9,7 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
-//TODO: Configure New, SpeedBox, Direction Input Box.
+
 namespace BouncingBallScreen
 {
     public class BouncingBallUI : Form
@@ -43,7 +43,7 @@ namespace BouncingBallScreen
         protected static System.Timers.Timer GraphicClock = new System.Timers.Timer();
         protected double BallSpeed = 60; // setting the refresh to 60 times per second
         protected double GraphicSpeed = 45; //DEFAULT: refresh the graphical area 30 times per second.
-        protected double BallDirection = 45; //DEFAULT:
+        protected static double BallDirection = 240; //DEFAULT: Works
         // misc
         protected double directioninradians;
         protected double Speed { get; set; }
@@ -73,23 +73,24 @@ namespace BouncingBallScreen
             Controls.Add(buttonStart);
             Controls.Add(buttonQuit);
             Controls.Add(buttonNew);
-            // TODO: | Label: X - Coord, Y - Coord
+            // Label: X - Coord, Y - Coord
             // Titles / Labels
             _new = new Label { Text = "Enter the speed (left side) and angle (right side) ", Location = new Point(1510, 350), AutoSize = true }; // creates instruction for the user
-            speedboxTitle = new Label { Text = "Enter speed (1-100)", Location = new Point(1450, 380), AutoSize = true };
+            speedboxTitle = new Label { Text = "Enter speed (1-300)", Location = new Point(1450, 380), AutoSize = true };
             directionboxTitle = new Label { Text = "Enter the degree", Location = new Point(1750, 380), AutoSize = true };
 
             // Textboxs / Input Properties
             SpeedBox = new TextBox { Location = new Point(1450, 400), Enabled = true, Text = string.Empty };
-            DirectionalBox = new TextBox { Location = new Point(1750, 400), Enabled = true };
+            DirectionalBox = new TextBox { Location = new Point(1750, 400), Enabled = true, Text = string.Empty };
             readysetgo.Click += GetValues;
+
         }
 
         protected void RenderGraphics()
         {
             // need to convert degrees to radians.
             directioninradians = (BallDirection * Math.PI) / 180.0;
-            // TODO: The speed per tic is the ball speed per refresh divided by refreshes a second
+            // The speed per tic is the ball speed per refresh divided by refreshes a second
             BallSpeed_PerTic = BallSpeed / GraphicSpeed;
             ball_deltax = BallSpeed_PerTic * Math.Cos(directioninradians);
             ball_deltay = BallSpeed_PerTic * Math.Sin(directioninradians);
@@ -111,15 +112,15 @@ namespace BouncingBallScreen
         }
         protected void GetValues(object sender, EventArgs events)
         {
+            BallDirection = double.Parse(DirectionalBox.Text); //occurs before RenderGraphics
+            BallSpeed = double.Parse(SpeedBox.Text); 
             Controls.Remove(readysetgo);
             Controls.Remove(_new);
             Controls.Remove(speedboxTitle);
             Controls.Remove(directionboxTitle);
             Controls.Remove(SpeedBox);
             Controls.Remove(DirectionalBox);
-            Controls.Add(buttonNew);
-            if (!SpeedBox.Text.Length.Equals(0)) { BallSpeed = Convert.ToDouble(SpeedBox.Text); } //Avoids strange parser error
-            if (!SpeedBox.Text.Length.Equals(0)) { BallDirection = Convert.ToDouble(DirectionalBox.Text); } // if the length is equal to null do not try and convert
+            Controls.Add(buttonNew); 
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -153,30 +154,26 @@ namespace BouncingBallScreen
         }
         protected void UpdateBallPosition(object sender, EventArgs myevent)
         {
-            isOn = true;
-            Invalidate();
+            if (!isOn) { isOn = true; }
             startingpositionx += ball_deltax;
             startingpositiony -= ball_deltay;
             if ((int)Math.Round(startingpositionx + 5) >= rightsidehand_x)
             {
                 ball_deltax = -ball_deltax;
-                ball_deltay = -ball_deltay;
             }
             if ((int)Math.Round(startingpositionx - 5) <= leftsidehand_x)
             {
                 ball_deltax = -ball_deltax;
-                ball_deltay = -ball_deltay;
             }
-            if((int)Math.Round(startingpositiony + 5) >= upperwall_y)
+            if ((int)Math.Round(startingpositiony + 5) <= lowerwall_y)
             {
-                ball_deltax = -ball_deltax;
                 ball_deltay = -ball_deltay;
             }
-            if((int)Math.Round(startingpositiony - 5) <= lowerwall_y)
+            if ((int)Math.Round(startingpositiony - 5) >= upperwall_y)
             {
-                ball_deltax = -ball_deltax;
                 ball_deltay = -ball_deltay;
             }
+            Invalidate();
         }
 
         protected void EndApplication(object sender, EventArgs myevent) => Close();
