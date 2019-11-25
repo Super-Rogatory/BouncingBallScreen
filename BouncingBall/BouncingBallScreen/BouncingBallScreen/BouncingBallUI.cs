@@ -72,6 +72,7 @@ namespace BouncingBallScreen
             Controls.Add(viewcoordinateY);
 
             buttonStart.Click += UpdateBallPosition;
+            buttonStart.Click += UpdateXYClock;
             buttonQuit.Click += EndApplication;
             buttonNew.Click += NewButtonClick;
 
@@ -159,7 +160,7 @@ namespace BouncingBallScreen
         }
         protected void StartingXYClock()
         {
-            TextClock.Interval = 3000;
+            TextClock.Interval = 1.0;
             TextClock.Enabled = true;
         }
         protected void UpdateBallPosition(object sender, EventArgs myevent)
