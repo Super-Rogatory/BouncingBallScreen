@@ -1,0 +1,2 @@
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/bin/Release/BouncingBallScreen.exe
+/home/superrogatory/Projects/Project4/BouncingBall/BouncingBallScreen/BouncingBallScreen/obj/x86/Release/BouncingBallScreen.exe

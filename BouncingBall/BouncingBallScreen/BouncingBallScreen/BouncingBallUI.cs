@@ -16,7 +16,7 @@ namespace BouncingBallScreen
     {
         // declaration of RenderButtons
         Button buttonStart, buttonQuit, readysetgo, buttonNew;
-        Label speedboxTitle, directionboxTitle, _new;
+        Label speedboxTitle, directionboxTitle, _new, viewcoordinateX, viewcoordinateY;
         TextBox SpeedBox, DirectionalBox;
         // position for the ball screen
         protected const int from_x = 535;
@@ -41,6 +41,7 @@ namespace BouncingBallScreen
         protected double BallSpeed_PerTic; // pixels per tic
         protected static System.Timers.Timer BallClock = new System.Timers.Timer(); // ball clock, this is what will handle the refresh. (by interval)
         protected static System.Timers.Timer GraphicClock = new System.Timers.Timer();
+        protected static System.Timers.Timer TextClock = new System.Timers.Timer();
         protected double BallSpeed = 60; // setting the refresh to 60 times per second
         protected double GraphicSpeed = 45; //DEFAULT: refresh the graphical area 30 times per second.
         protected static double BallDirection = 240; //DEFAULT: Works
@@ -55,8 +56,8 @@ namespace BouncingBallScreen
             Text = "Bouncing Ball in Blistering Biome";
             BallClock.Elapsed += new System.Timers.ElapsedEventHandler(UpdateBallPosition);
             GraphicClock.Elapsed += new System.Timers.ElapsedEventHandler(UpdateBallPosition);
+            TextClock.Elapsed += new System.Timers.ElapsedEventHandler(UpdateXYClock);
             RenderButtons();
-            RenderGraphics();
         }
         public void RenderButtons()
         {
@@ -65,6 +66,10 @@ namespace BouncingBallScreen
             buttonQuit = new Button { Text = "Quit", Location = new Point(1625, 540), Size = new Size(50, 50) };
             buttonNew = new Button { Text = "New", Location = new Point(1612, 400), AutoSize = true };
             readysetgo = new Button { Text = "Set", Location = new Point(1612, 500), AutoSize = true };
+            viewcoordinateX = new Label { Text = GetTextX(), Location = new Point(500, 85), Size = new Size(42,20), BackColor = Color.GhostWhite };
+            viewcoordinateY = new Label { Text = GetTextY(), Location = new Point(1350, 85), Size = new Size(42,20), BackColor = Color.GhostWhite };
+            Controls.Add(viewcoordinateX);
+            Controls.Add(viewcoordinateY);
 
             buttonStart.Click += UpdateBallPosition;
             buttonQuit.Click += EndApplication;
@@ -86,19 +91,12 @@ namespace BouncingBallScreen
 
         }
 
-        protected void RenderGraphics()
-        {
-            // need to convert degrees to radians.
-            directioninradians = (BallDirection * Math.PI) / 180.0;
-            // The speed per tic is the ball speed per refresh divided by refreshes a second
-            BallSpeed_PerTic = BallSpeed / GraphicSpeed;
-            ball_deltax = BallSpeed_PerTic * Math.Cos(directioninradians);
-            ball_deltay = BallSpeed_PerTic * Math.Sin(directioninradians);
-        }
+        protected string GetTextX() => Convert.ToString(Math.Round(startingpositionx, 0)); // GetText is the function, returning String conversion of x position
+        protected string GetTextY() => Convert.ToString(Math.Round(startingpositiony, 0));
 
         protected void NewButtonClick(object sender, EventArgs events)
         {
-            isOn = false; 
+            isOn = false;
             BallClock.Enabled = false;
             GraphicClock.Enabled = false;
             Controls.Add(_new); // creates text 
@@ -113,16 +111,22 @@ namespace BouncingBallScreen
         protected void GetValues(object sender, EventArgs events)
         {
             BallDirection = double.Parse(DirectionalBox.Text); //occurs before RenderGraphics
-            BallSpeed = double.Parse(SpeedBox.Text); 
+            BallSpeed = double.Parse(SpeedBox.Text);
+            // need to convert degrees to radians.
+            directioninradians = (BallDirection * Math.PI) / 180.0;
+            // The speed per tic is the ball speed per refresh divided by refreshes a second
+            BallSpeed_PerTic = BallSpeed / GraphicSpeed;
+            ball_deltax = BallSpeed_PerTic * Math.Cos(directioninradians);
+            ball_deltay = BallSpeed_PerTic * Math.Sin(directioninradians);
             Controls.Remove(readysetgo);
             Controls.Remove(_new);
             Controls.Remove(speedboxTitle);
             Controls.Remove(directionboxTitle);
             Controls.Remove(SpeedBox);
             Controls.Remove(DirectionalBox);
-            Controls.Add(buttonNew); 
+            Controls.Add(buttonNew);
         }
-
+        
         protected override void OnPaint(PaintEventArgs e)
         {
             // created the bouncing ball area
@@ -134,6 +138,7 @@ namespace BouncingBallScreen
             {
                 StartingGraphicClock(GraphicSpeed); // pull value from the new function
                 StartingBallClock(BallSpeed); // pull value from the new functon
+                StartingXYClock();
             }
 
             base.OnPaint(e);
@@ -151,6 +156,11 @@ namespace BouncingBallScreen
             }
             BallClock.Interval = Convert.ToInt32((1000.0 / update_ball_speed)); // 1000.0 because it is in milliseconds. 1 Second / 60 refrehes a second. Sets interval to 60.
             BallClock.Enabled = true;
+        }
+        protected void StartingXYClock()
+        {
+            TextClock.Interval = 3000;
+            TextClock.Enabled = true;
         }
         protected void UpdateBallPosition(object sender, EventArgs myevent)
         {
@@ -175,7 +185,13 @@ namespace BouncingBallScreen
             }
             Invalidate();
         }
-
+        protected void UpdateXYClock(object sender, EventArgs myevent)
+        {
+            viewcoordinateX.Text = GetTextX(); //will retreive the text from the get function, and update the text box accordingly.
+            viewcoordinateY.Text = GetTextY();
+        }
         protected void EndApplication(object sender, EventArgs myevent) => Close();
     }
 }
+
+
